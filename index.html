@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitch Hayes — Web Designer + Automation Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0e0c0a;
+      --gold: #c8a96e;
+      --off-white: #f0ead8;
+      --muted: #8a7a5e;
+      --green: #5a6e4a;
+      --surface: #141210;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--off-white);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      background: transparent;
+      transition: background 0.35s ease, border-color 0.35s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+      background: rgba(14, 12, 10, 0.96);
+      border-bottom-color: rgba(200, 169, 110, 0.12);
+    }
+
+    .nav-logo {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .nav-logo .n-first { color: var(--off-white); }
+    .nav-logo .n-last  { color: var(--gold); }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--off-white); }
+
+    /* ===== HERO ===== */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 2.5rem;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 1.12;
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-headline .line1 { color: var(--off-white); display: block; }
+    .hero-headline .line2 { color: var(--gold); display: block; }
+
+    .hero-typed-row {
+      display: flex;
+      align-items: center;
+      min-height: 1.6em;
+      margin-bottom: 0.4rem;
+    }
+
+    #typed-text {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.05rem;
+      color: var(--gold);
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: var(--gold);
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: blink 0.72s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    #typed-sub {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      color: var(--green);
+      min-height: 1.4em;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-subline {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.09em;
+      text-decoration: none;
+      padding: 0.8rem 1.75rem;
+      cursor: pointer;
+      border: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .btn-ghost:hover { background: rgba(200, 169, 110, 0.1); }
+
+    .btn-filled {
+      background: var(--gold);
+      color: var(--bg);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-filled:hover { background: #d4b87c; }
+
+    .hero-rule {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(200, 169, 110, 0.18);
+    }
+
+    /* ===== TICKER ===== */
+    .ticker-wrap {
+      overflow: hidden;
+      width: 100%;
+      border-top: 1px solid rgba(200, 169, 110, 0.12);
+      border-bottom: 1px solid rgba(200, 169, 110, 0.12);
+      padding: 0.9rem 0;
+      background: var(--bg);
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 34s linear infinite;
+    }
+
+    .ticker-track span {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      padding: 0 1rem;
+    }
+
+    .ticker-track .dia { color: var(--gold); padding: 0 0.6rem; }
+
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ===== SECTIONS ===== */
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+    }
+
+    .eyebrow {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-left h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(34px, 4.5vw, 62px);
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .about-left .w  { color: var(--off-white); display: block; }
+    .about-left .g  { color: var(--gold); display: block; }
+
+    .about-right p {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--green);
+      line-height: 1.9;
+    }
+
+    .about-right p + p { margin-top: 1.5rem; }
+
+    /* ===== WORK ===== */
+    .work-header {
+      margin-bottom: 2.75rem;
+    }
+
+    .work-header h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 4vw, 52px);
+      margin-bottom: 0.6rem;
+    }
+
+    .work-header .sub {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      border: 1px solid rgba(200, 169, 110, 0.25);
+      background: var(--surface);
+      padding: 2rem;
+    }
+
+    .card.dashed {
+      border: 1px dashed rgba(200, 169, 110, 0.2);
+      background: rgba(14, 12, 10, 0.4);
+    }
+
+    .card.dashed h3 {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: normal;
+    }
+
+    .card-tags {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.2rem;
+      color: var(--off-white);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+
+    .card a {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+
+    .card a:hover { opacity: 0.7; }
+
+    /* ===== CONTACT ===== */
+    .contact-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+    }
+
+    .contact-inner h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(30px, 4vw, 52px);
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-inner .sub {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid rgba(200, 169, 110, 0.2);
+      color: var(--off-white);
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(200, 169, 110, 0.55);
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--muted); }
+
+    .contact-form textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    .contact-form button {
+      width: 100%;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+
+    .contact-form button:hover { background: #d4b87c; }
+
+    .contact-direct {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 1.25rem;
+    }
+
+    .contact-direct a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid rgba(200, 169, 110, 0.12);
+      padding: 2rem 2.5rem 1.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-logo {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .footer-logo .f-first { color: var(--off-white); }
+    .footer-logo .f-last  { color: var(--gold); }
+
+    .footer-center {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--off-white); }
+
+    .footer-copy {
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      opacity: 0.55;
+    }
+
+    /* ===== FADE-UP ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.d1 { transition-delay: 0.12s; }
+    .fade-up.d2 { transition-delay: 0.24s; }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+
+      .nav-links { gap: 1.25rem; }
+
+      #hero { padding: 0 1.25rem; }
+
+      .section-inner,
+      .contact-inner {
+        padding: 4rem 1.25rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        flex-direction: column;
+        gap: 0.85rem;
+        text-align: center;
+      }
+
+      footer { padding: 2rem 1.25rem 1.25rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-ctas { flex-direction: column; }
+      .btn { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="nav-logo">
+      <span class="n-first">MITCH </span><span class="n-last">HAYES</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Web Designer + Automation Builder &middot; Chippewa Falls, WI</p>
+      <h1 class="hero-headline">
+        <span class="line1">Built like a frame.</span>
+        <span class="line2">Finished like a product.</span>
+      </h1>
+      <div class="hero-typed-row">
+        <span id="typed-text"></span><span class="cursor"></span>
+      </div>
+      <p id="typed-sub"></p>
+      <p class="hero-subline">Local businesses deserve the same quality they thought only came from a big tech firm.</p>
+      <div class="hero-ctas">
+        <a href="#work" class="btn btn-ghost">See My Work</a>
+        <a href="#contact" class="btn btn-filled">Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-rule"></div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span>CUSTOM WEBSITES <span class="dia">&#9670;</span> AUTOMATION BUILDS <span class="dia">&#9670;</span> CHIPPEWA FALLS WI <span class="dia">&#9670;</span> BUILT FOR BUSINESS <span class="dia">&#9670;</span> FAST TURNAROUND <span class="dia">&#9670;</span> FUNCTIONAL BY DESIGN <span class="dia">&#9670;</span> NO TEMPLATES <span class="dia">&#9670;</span> LOCAL BUSINESS SPECIALIST <span class="dia">&#9670;</span></span>
+      <span>CUSTOM WEBSITES <span class="dia">&#9670;</span> AUTOMATION BUILDS <span class="dia">&#9670;</span> CHIPPEWA FALLS WI <span class="dia">&#9670;</span> BUILT FOR BUSINESS <span class="dia">&#9670;</span> FAST TURNAROUND <span class="dia">&#9670;</span> FUNCTIONAL BY DESIGN <span class="dia">&#9670;</span> NO TEMPLATES <span class="dia">&#9670;</span> LOCAL BUSINESS SPECIALIST <span class="dia">&#9670;</span></span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid fade-up">
+        <div class="about-left">
+          <h2>
+            <span class="w">THE CARPENTER</span>
+            <span class="g">WHO CODES.</span>
+          </h2>
+        </div>
+        <div class="about-right">
+          <p>I build websites and automations for small businesses in the Chippewa Falls area. Before this I spent years framing buildings. Both jobs are the same at the core: figure out what the structure needs to do, then build it so it holds.</p>
+          <p>A lot of small business owners have heard the pitch for this stuff before and walked away confused or overcharged. That's not what this is. A website that actually works for your business, or an automation that saves you hours per week on tedious tasks, is more accessible than most people think. You just need someone who explains it straight and builds it right.</p>
+          <p>That's the idea.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="section-inner">
+      <div class="work-header fade-up">
+        <p class="eyebrow">SELECTED WORK</p>
+        <h2>What I've Built.</h2>
+        <p class="sub">Real projects. Every site is a functional business tool.</p>
+      </div>
+      <div class="work-grid">
+        <div class="card fade-up d1">
+          <p class="card-tags">Bar + Restaurant &middot; Local Business &middot; Online Ordering</p>
+          <h3>Bar + Restaurant Build: Mitch's Watering Hole</h3>
+          <p>Full bar and restaurant site for a local Eau Claire dive bar. Live menu, events calendar, happy hour callout, private event booking form, and a multi-step online ordering flow with cart, item notes, and side selection. Built to function like a real operation.</p>
+          <a href="https://mitchs-dive-site.lovable.app" target="_blank" rel="noopener">View Live Site &rarr;</a>
+        </div>
+        <div class="card dashed fade-up d2">
+          <h3>Your Business Here</h3>
+          <p>Taking on new projects. Need a site or automation that actually works for your business? Let's talk.</p>
+          <a href="#contact">Start a Project &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="fade-up">
+        <p class="eyebrow">LET'S BUILD SOMETHING</p>
+        <h2>Ready to build something?</h2>
+        <p class="sub">Have a project in mind? Drop me a message. No obligation, just an honest conversation.</p>
+      </div>
+      <form
+        class="contact-form fade-up d1"
+        action="mailto:mitch.cfdesign@gmail.com"
+        method="post"
+        enctype="text/plain"
+      >
+        <input type="text" name="Name" placeholder="Name" required>
+        <input type="email" name="Email" placeholder="Email" required>
+        <textarea name="Message" placeholder="Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+      <p class="contact-direct fade-up d2">Or email directly: <a href="mailto:mitch.cfdesign@gmail.com">mitch.cfdesign@gmail.com</a></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-logo">
+        <span class="f-first">MITCH </span><span class="f-last">HAYES</span>
+      </div>
+      <div class="footer-center">Web Designer + Automation Builder &middot; Chippewa Falls, WI</div>
+      <div class="footer-links">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Mitch Hayes</p>
+  </footer>
+
+  <script>
+    // ===== NAV SCROLL =====
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ===== CANVAS PARTICLES =====
+    (function () {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx = canvas.getContext('2d');
+      const COUNT = 90;
+      let particles = [];
+      let raf;
+
+      function rand(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function makeParticle(atBottom) {
+        const maxLife = rand(220, 440);
+        return {
+          x: rand(0, canvas.width),
+          y: atBottom ? canvas.height + rand(0, 20) : rand(0, canvas.height),
+          r: rand(0.8, 2.2),
+          vx: rand(-0.12, 0.12),
+          vy: rand(0.25, 0.65),
+          life: atBottom ? 0 : Math.floor(rand(0, maxLife)),
+          maxLife
+        };
+      }
+
+      function resize() {
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
+      function init() {
+        particles = [];
+        for (let i = 0; i < COUNT; i++) {
+          particles.push(makeParticle(false));
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.life++;
+          p.x += p.vx;
+          p.y -= p.vy;
+
+          // Only replace when off-screen; let life cycle for pulsing opacity
+          if (p.y < -4) {
+            particles[i] = makeParticle(true);
+            continue;
+          }
+
+          // Wrap life so sine pulse repeats while particle drifts
+          const t = (p.life % p.maxLife) / p.maxLife;
+          const alpha = Math.sin(t * Math.PI) * 0.55;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200,169,110,${alpha})`;
+          ctx.fill();
+        }
+        raf = requestAnimationFrame(draw);
+      }
+
+      resize();
+      init();
+      draw();
+
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(raf);
+        resize();
+        init();
+        draw();
+      }, { passive: true });
+    })();
+
+    // ===== TYPED ANIMATION =====
+    (function () {
+      const textEl = document.getElementById('typed-text');
+      const subEl  = document.getElementById('typed-sub');
+
+      const cycles = [
+        { main: 'I build websites.',          sub: '// that actually work for your business' },
+        { main: 'I build automations.',        sub: '// hours back per week on tedious tasks' },
+        { main: 'I build things that last.',   sub: '// no shortcuts. no templates.' }
+      ];
+
+      let ci = 0;
+      let ch = 0;
+      let deleting = false;
+
+      const TSPEED = 62;
+      const DSPEED = 36;
+      const PAUSE  = 2300;
+      const GAP    = 420;
+
+      function tick() {
+        const { main, sub } = cycles[ci];
+
+        if (!deleting) {
+          ch++;
+          textEl.textContent = main.slice(0, ch);
+          if (ch === main.length) {
+            subEl.textContent = sub;
+            deleting = true;
+            setTimeout(tick, PAUSE);
+            return;
+          }
+          setTimeout(tick, TSPEED);
+        } else {
+          ch--;
+          textEl.textContent = main.slice(0, ch);
+          if (ch === 0) {
+            subEl.textContent = '';
+            deleting = false;
+            ci = (ci + 1) % cycles.length;
+            setTimeout(tick, GAP);
+            return;
+          }
+          setTimeout(tick, DSPEED);
+        }
+      }
+
+      setTimeout(tick, 900);
+    })();
+
+    // ===== INTERSECTION OBSERVER — FADE UP =====
+    (function () {
+      const els = document.querySelectorAll('.fade-up');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+</body>
+</html>
